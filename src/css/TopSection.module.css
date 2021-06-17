@@ -1,0 +1,28 @@
+.main {
+  background-color: #840eb6;
+  padding: 125px;
+  margin-top: 4%;
+  flex-direction: row;
+}
+
+.mainText {
+  margin: 0;
+}
+
+.searchJob {
+  width: 450px;
+  margin-left: -5%;
+  margin-right: 5%;
+}
+.searchLocation {
+  width: 450px;
+  margin-right: 5%;
+}
+
+.searchButton {
+  width: 200px;
+  height: 47.4px;
+}
+.searchButtonText {
+  font-size: large;
+}
