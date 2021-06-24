@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Button,
   Form,
@@ -6,70 +6,82 @@ import {
   Header,
   Image,
   Message,
+  Dropdown,
   Segment,
   Container,
 } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 import logo from "../assets/hrms-logo.png";
+import CityService from "../../../services/CityService";
 
-export default function JobSeekerRegister() {
-  const options = [
-    { key: "m", text: "Erkek", value: "male" },
-    { key: "f", text: "Kadın", value: "female" },
-    { key: "o", text: "Belirtmek İstemiyorum", value: "other" },
-  ];
+export default function EmployerRegister() {
+  const [cities, setCities] = useState([]);
+
+  useEffect(() => {
+    let cityService = new CityService();
+
+    cityService.getCitys().then((result) => setCities(result.data.data));
+  }, []);
+
+  const cityOptions = cities.map((city, index) => ({
+    key: index,
+    text: city.cityName,
+    value: city.id,
+  }));
+
   return (
     <div>
       <Container className="register">
         <Header as="h2" style={{ color: "#840EB6" }} textAlign="center">
-          Kayıt Ol
+          Şirket Olarak Kayıt Ol
         </Header>
         <Form size="large">
           <Segment stacked>
             <Grid stackable>
               <Grid.Column width={8}>
                 <div style={{ marginTop: "1em" }}>
-                  <label>İsim</label>
+                  <label>Şirket İsimi</label>
 
                   <Form.Input
                     fluid
-                    icon="user"
+                    icon="building"
                     iconPosition="left"
-                    placeholder="İsim"
+                    placeholder="Şirket İsimi"
                     type="text"
                     name="firstName"
                   />
                 </div>
                 <div style={{ marginTop: "1em" }}>
-                  <label>Soy İsim</label>
+                  <label>Telefon Numarası</label>
                   <Form.Input
                     fluid
-                    icon="user"
+                    icon="phone"
                     iconPosition="left"
-                    placeholder="Soy isim"
+                    placeholder="Telefon Numarası"
                     type="text"
                     name="lastName"
                   />
                 </div>
                 <div style={{ marginTop: "1em" }}>
-                  <label>Kimlik Numarası</label>
+                  <label>Web Sitesi</label>
                   <Form.Input
                     fluid
-                    icon="id card"
+                    icon="wordpress"
                     iconPosition="left"
-                    placeholder="Kimlik numarası"
+                    placeholder="Web Sitesi"
                     type="text"
                     name="nationalNumber"
                   />
                 </div>
                 <div style={{ marginTop: "1em" }}>
-                  <label>Doğum Tarihi</label>
+                  <label>Sektör</label>
                   <Form.Input
                     fluid
-                    icon="calendar times"
+                    icon="chart pie
+                    "
                     iconPosition="left"
-                    placeholder="Dogum tarihi"
-                    type="date"
+                    placeholder="Sektör"
+                    type="text"
                     name="birthDate"
                   />
                 </div>
@@ -88,12 +100,15 @@ export default function JobSeekerRegister() {
                   />
                 </div>
                 <div style={{ marginTop: "1em" }}>
-                  <label>Email Tekrar</label>
-                  <Form.Input
+                  <label>Lokasyon</label>
+                  <Form.Dropdown
                     fluid
-                    icon="mail"
+                    item
+                    search
+                    selection
+                    options={cityOptions}
                     iconPosition="left"
-                    placeholder="E-mail adresi tekrar"
+                    placeholder="Lokasyon"
                     name="reEmail"
                   />
                 </div>
@@ -134,8 +149,8 @@ export default function JobSeekerRegister() {
           </Segment>
         </Form>
         <Message info>
-          <Link to={"/registerEmployer"}>
-            İşveren olarak kaydolmak için buraya tıkla
+          <Link to={"/registerJobSeeker"}>
+            Normal üye olarak kaydolmak için buraya tıkla
           </Link>
         </Message>
       </Container>

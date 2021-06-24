@@ -28,7 +28,7 @@ export default function Navi() {
             <Menu.Item
               className={styles.menuText}
               icon="building outline"
-              name="HRMS"
+              name="H R M S"
             ></Menu.Item>
           </Link>
           <Menu.Menu position="right">

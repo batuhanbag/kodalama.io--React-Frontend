@@ -9,7 +9,7 @@ export default function SignOut(props) {
         <Button onClick={props.signIn} primary>
           Giriş Yap
         </Button>
-        <Link to={"/register"}>
+        <Link to={"/registerJobSeeker"}>
           <Button primary style={{ marginLeft: "0.5em" }}>
             Kayıt Ol
           </Button>

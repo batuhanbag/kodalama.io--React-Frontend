@@ -9,6 +9,7 @@ import JobSeekerRegister from "../pages/User/Jobseeker/JobSeekerRegister";
 import TopSection from "./TopSection";
 import { Route } from "react-router";
 import NoticeAdd from "../pages/Notice/NoticeAdd";
+import EmployerRegister from "../pages/User/Employer/EmployerRegister";
 
 export default function Dashboard() {
   return (
@@ -26,7 +27,16 @@ export default function Dashboard() {
               <Route exact path="/jobseeker" component={EmployeeList} />
               <Route exact path="/cvs" component={EmployerList} />
               <Route exact path="/noticeadd" component={NoticeAdd} />
-              <Route exact path="/register" component={JobSeekerRegister} />
+              <Route
+                exact
+                path="/registerJobSeeker"
+                component={JobSeekerRegister}
+              />
+              <Route
+                exact
+                path="/registerEmployer"
+                component={EmployerRegister}
+              />
             </Grid.Column>
           </Grid.Row>
         </Grid>
