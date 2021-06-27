@@ -1,6 +1,13 @@
 import React, { useState } from "react";
 import { useHistory, Link } from "react-router-dom";
-import { Button, Menu, Container, Icon, Segment } from "semantic-ui-react";
+import {
+  Button,
+  Menu,
+  Container,
+  Icon,
+  Segment,
+  Dropdown,
+} from "semantic-ui-react";
 import styles from "../css/Navi.module.css";
 import SignOut from "./SignOut";
 import SignedIn from "./SignedIn";
@@ -39,6 +46,7 @@ export default function Navi() {
                 <SignOut signIn={handleSignIn} />
               )}
             </Menu.Item>
+
             <Menu.Item>
               <Link to={`/noticeadd`}>
                 <Button inverted color="violet">

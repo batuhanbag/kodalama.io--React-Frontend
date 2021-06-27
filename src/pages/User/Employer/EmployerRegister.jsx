@@ -10,12 +10,55 @@ import {
   Segment,
   Container,
 } from "semantic-ui-react";
+import { useFormik } from "formik";
+import { useHistory } from "react-router-dom";
+import * as Yup from "yup";
 import { Link } from "react-router-dom";
 import logo from "../assets/hrms-logo.png";
 import CityService from "../../../services/CityService";
+import EmployerService from "../../../services/EmployerService";
 
 export default function EmployerRegister() {
   const [cities, setCities] = useState([]);
+
+  const EmployerRegisterSchema = Yup.object().shape({
+    companyName: Yup.string().required("Şirket İsimi Gereklidir."),
+    email: Yup.string().email().required("Email Adresi Gereklidir"),
+    location: Yup.string().required("Lokasyon Gereklidir"),
+    password: Yup.string()
+      .required("Parola Gereklidir")
+      .min(8, "Parola 8 karakterden küçük olamaz")
+      .max(24, "Parola 24 karakterden uzun olamaz."),
+    phoneNumber: Yup.number().required("Telefon Numarası Gereklidir."),
+    sector: Yup.string().required("Sektör Adı Gereklidir"),
+    webSite: Yup.string().required("Web Sitesi Gereklidir."),
+  });
+
+  const history = useHistory();
+
+  let addEmployer = new EmployerService();
+
+  const formik = useFormik({
+    initialValues: {
+      companyName: "",
+      email: "",
+      location: "",
+      password: "",
+      phoneNumber: "",
+      sector: "",
+      webSite: "",
+    },
+    validationSchema: EmployerRegisterSchema,
+    onSubmit: (values) => {
+      console.log(values);
+
+      addEmployer
+        .addEmployers(values)
+        .then((result) => console.log(result.data));
+
+      history.push("/");
+    },
+  });
 
   useEffect(() => {
     let cityService = new CityService();
@@ -26,8 +69,11 @@ export default function EmployerRegister() {
   const cityOptions = cities.map((city, index) => ({
     key: index,
     text: city.cityName,
-    value: city.id,
+    value: city.cityName,
   }));
+  const handleChangeSemantic = (value, fieldName) => {
+    formik.setFieldValue(fieldName, value);
+  };
 
   return (
     <div>
@@ -48,8 +94,19 @@ export default function EmployerRegister() {
                     iconPosition="left"
                     placeholder="Şirket İsimi"
                     type="text"
-                    name="firstName"
+                    name="companyName"
+                    onChange={(event, data) =>
+                      handleChangeSemantic(data.value, "companyName")
+                    }
+                    onBlur={formik.onBlur}
+                    id="companyName"
+                    value={formik.values.companyName}
                   />
+                  {formik.errors.companyName && formik.touched.companyName && (
+                    <div className={"ui pointing red basic label"}>
+                      {formik.errors.companyName}
+                    </div>
+                  )}
                 </div>
                 <div style={{ marginTop: "1em" }}>
                   <label>Telefon Numarası</label>
@@ -59,8 +116,19 @@ export default function EmployerRegister() {
                     iconPosition="left"
                     placeholder="Telefon Numarası"
                     type="text"
-                    name="lastName"
+                    name="phoneNumber"
+                    onChange={(event, data) =>
+                      handleChangeSemantic(data.value, "phoneNumber")
+                    }
+                    onBlur={formik.onBlur}
+                    id="phoneNumber"
+                    value={formik.values.phoneNumber}
                   />
+                  {formik.errors.phoneNumber && formik.touched.phoneNumber && (
+                    <div className={"ui pointing red basic label"}>
+                      {formik.errors.phoneNumber}
+                    </div>
+                  )}
                 </div>
                 <div style={{ marginTop: "1em" }}>
                   <label>Web Sitesi</label>
@@ -70,8 +138,19 @@ export default function EmployerRegister() {
                     iconPosition="left"
                     placeholder="Web Sitesi"
                     type="text"
-                    name="nationalNumber"
+                    name="webSite"
+                    onChange={(event, data) =>
+                      handleChangeSemantic(data.value, "webSite")
+                    }
+                    onBlur={formik.onBlur}
+                    id="webSite"
+                    value={formik.values.webSite}
                   />
+                  {formik.errors.webSite && formik.touched.webSite && (
+                    <div className={"ui pointing red basic label"}>
+                      {formik.errors.webSite}
+                    </div>
+                  )}
                 </div>
                 <div style={{ marginTop: "1em" }}>
                   <label>Sektör</label>
@@ -82,8 +161,19 @@ export default function EmployerRegister() {
                     iconPosition="left"
                     placeholder="Sektör"
                     type="text"
-                    name="birthDate"
+                    name="sector"
+                    onChange={(event, data) =>
+                      handleChangeSemantic(data.value, "sector")
+                    }
+                    onBlur={formik.onBlur}
+                    id="sector"
+                    value={formik.values.sector}
                   />
+                  {formik.errors.sector && formik.touched.sector && (
+                    <div className={"ui pointing red basic label"}>
+                      {formik.errors.sector}
+                    </div>
+                  )}
                 </div>
               </Grid.Column>
 
@@ -97,7 +187,18 @@ export default function EmployerRegister() {
                     placeholder="E-mail adresi"
                     type="email"
                     name="email"
+                    onChange={(event, data) =>
+                      handleChangeSemantic(data.value, "email")
+                    }
+                    onBlur={formik.onBlur}
+                    id="email"
+                    value={formik.values.email}
                   />
+                  {formik.errors.email && formik.touched.email && (
+                    <div className={"ui pointing red basic label"}>
+                      {formik.errors.email}
+                    </div>
+                  )}
                 </div>
                 <div style={{ marginTop: "1em" }}>
                   <label>Lokasyon</label>
@@ -109,8 +210,19 @@ export default function EmployerRegister() {
                     options={cityOptions}
                     iconPosition="left"
                     placeholder="Lokasyon"
-                    name="reEmail"
+                    name="location"
+                    onChange={(event, data) =>
+                      handleChangeSemantic(data.value, "location")
+                    }
+                    onBlur={formik.onBlur}
+                    id="location"
+                    value={formik.values.location}
                   />
+                  {formik.errors.location && formik.touched.location && (
+                    <div className={"ui pointing red basic label"}>
+                      {formik.errors.location}
+                    </div>
+                  )}
                 </div>
                 <div style={{ marginTop: "1em" }}>
                   <label>Şifre</label>
@@ -121,7 +233,18 @@ export default function EmployerRegister() {
                     placeholder="Şifre"
                     type="password"
                     name="password"
+                    onChange={(event, data) =>
+                      handleChangeSemantic(data.value, "password")
+                    }
+                    onBlur={formik.onBlur}
+                    id="password"
+                    value={formik.values.password}
                   />
+                  {formik.errors.password && formik.touched.password && (
+                    <div className={"ui pointing red basic label"}>
+                      {formik.errors.password}
+                    </div>
+                  )}
                 </div>
                 <div style={{ marginTop: "1em" }}>
                   <label>Şifre Tekrar</label>
@@ -132,6 +255,8 @@ export default function EmployerRegister() {
                     placeholder="Şifre tekrar"
                     type="password"
                     name="rePassword"
+                    onBlur={formik.onBlur}
+                    id="rePassword"
                   />
                 </div>
               </Grid.Column>

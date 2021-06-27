@@ -6,25 +6,32 @@ export default function Side() {
   return (
     <div>
       <Container className="main">
-        <Menu fluid compact icon="labeled" vertical>
-          <Menu.Item>
+        <Menu fluid compact icon="labeled" vertical style={{ padding: 30 }}>
+          <Menu.Item style={{ padding: 20 }}>
             <Icon name="briefcase" />
-            <Link to={`/`}>İş ilanları</Link>
+            <Link style={{ color: "black" }} to={`/`}>
+              İş ilanları
+            </Link>
           </Menu.Item>
 
-          <Menu.Item>
+          <Menu.Item style={{ padding: 20 }}>
             <Icon name="building" />
-            <Link to={`/employers`}>İş Verenler</Link>
+            <Link style={{ color: "black" }} to={`/employers`}>
+              İş Verenler
+            </Link>
           </Menu.Item>
 
-          <Menu.Item>
-            <Icon name="code branch" />
-            <Link to={`/jobseeker`}>İş Arayanlar</Link>
+          <Menu.Item style={{ padding: 20 }}>
+            <Icon name="search" />
+            <Link style={{ color: "black" }} to={`/jobseeker`}>
+              İş Arayanlar
+            </Link>
           </Menu.Item>
-
-          <Menu.Item>
-            <Icon name="clipboard" />
-            <Link to={`/cvs`}>Cvler</Link>
+          <Menu.Item style={{ padding: 20 }}>
+            <Icon name="settings" />
+            <Link style={{ color: "black" }} to={`/settings`}>
+              Ayarlar
+            </Link>
           </Menu.Item>
         </Menu>
       </Container>

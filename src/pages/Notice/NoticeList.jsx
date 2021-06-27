@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { Button, Container, Table } from "semantic-ui-react";
+import { Link } from "react-router-dom";
+import { Button, Container, Card, Icon } from "semantic-ui-react";
 import NoticeService from "../../services/NoticeService";
 
 export default function NoticeList() {
@@ -9,7 +10,7 @@ export default function NoticeList() {
     let noticeService = new NoticeService();
 
     noticeService
-      .getNotices()
+      .getActiveNotices()
       .then((result) => setNotices(result.data.data), [])
       .catch();
   }, []);
@@ -17,37 +18,31 @@ export default function NoticeList() {
   return (
     <div>
       <Container className="main">
-        <Table striped>
-          <Table.Header>
-            <Table.Row>
-              <Table.HeaderCell>Şirket Adı</Table.HeaderCell>
-              <Table.HeaderCell>Pozisyon</Table.HeaderCell>
-              <Table.HeaderCell>Maaş Aralığı</Table.HeaderCell>
-              <Table.HeaderCell>Şehir</Table.HeaderCell>
-              <Table.HeaderCell>Kontenjan</Table.HeaderCell>
-              <Table.HeaderCell>Detaylar</Table.HeaderCell>
-            </Table.Row>
-          </Table.Header>
+        {notices.map((notice) => (
+          <Link to={`/noticedetail/${notice.id}`}>
+            <Card.Group>
+              <Card fluid color="purple" style={{ borderRadius: 20 }}>
+                <Card.Content>
+                  <Card.Header style={{ color: "#840EB6" }} textAlign="left">
+                    {notice.jobPosition.jobPositionName}
+                  </Card.Header>
+                  <Card.Meta textAlign="left">
+                    {notice.employer.companyName}
+                  </Card.Meta>
+                  <Card.Description
+                    textAlign="left"
+                    content={notice.jobDescription}
+                  />
 
-          <Table.Body>
-            {notices.map((notice) => (
-              <Table.Row>
-                <Table.Cell>{notice.employer.companyName}</Table.Cell>
-                <Table.Cell>{notice.jobPosition.jobPositionName}</Table.Cell>
-                <Table.Cell>
-                  {notice.minSalary} - {notice.maxSalary}
-                </Table.Cell>
-                <Table.Cell>{notice.city.cityName}</Table.Cell>
-                <Table.Cell>{notice.numberOfOpenPositions}</Table.Cell>
-                <Table.Cell>
-                  <Button inverted color="red">
-                    Görüntüle
-                  </Button>
-                </Table.Cell>
-              </Table.Row>
-            ))}
-          </Table.Body>
-        </Table>
+                  <Card.Description textAlign="right">
+                    {notice.numberOfOpenPositions} Kontenjan |{" "}
+                    <Icon name="location arrow" /> {notice.city.cityName}
+                  </Card.Description>
+                </Card.Content>
+              </Card>
+            </Card.Group>
+          </Link>
+        ))}
       </Container>
     </div>
   );

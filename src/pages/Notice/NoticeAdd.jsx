@@ -5,6 +5,7 @@ import {
   Input,
   TextArea,
   Card,
+  Header,
   Form,
   Grid,
   Container,
@@ -12,21 +13,22 @@ import {
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useHistory } from "react-router-dom";
+import NoticeService from "../../services/NoticeService";
 import CityService from "../../services/CityService";
-import NoticeService from "../../services/NoticeService.js";
 import JobPositionService from "../../services/JobPositionService";
+import "react-toastify/dist/ReactToastify.min.css";
+import { toast } from "react-toastify";
 
 export default function NoticeAdd() {
-  const JobAdvertAddSchema = Yup.object().shape({
-    lastDate: Yup.date()
+  const NoticeAddSchema = Yup.object().shape({
+    applicationDeadline: Yup.date()
       .nullable()
       .required("Bu alanın doldurulması zorunludur"),
-    description: Yup.string().required("Bu alanın doldurulması zorunludur"),
+    jobDescription: Yup.string().required("Bu alanın doldurulması zorunludur"),
     jobPositionId: Yup.string().required("Bu alanın doldurulması zorunludur"),
-    workTimeId: Yup.string().required("Bu alanın doldurulması zorunludur"),
-    workPlaceId: Yup.string().required("Bu alanın doldurulması zorunludur"),
-    educationLevel: Yup.string().required("Bu alanın doldurulması zorunludur"),
-    openPositions: Yup.string()
+    workTimeType: Yup.string().required("Bu alanın doldurulması zorunludur"),
+    typeOfWork: Yup.string().required("Bu alanın doldurulması zorunludur"),
+    numberOfOpenPositions: Yup.string()
       .required("Posizyon sayısı zorunludur")
       .min(1, "Posizyon sayısı 1 den küçük olamaz"),
     cityId: Yup.string().required("Bu alanın doldurulması zorunludur"),
@@ -44,23 +46,27 @@ export default function NoticeAdd() {
 
   const formik = useFormik({
     initialValues: {
-      description: "",
+      jobDescription: "",
       jobPositionId: "",
-      educationLevel: "",
-      workTimeId: "",
-      workPlaceId: "",
-      openPositions: "",
+      workTimeType: "",
+      typeOfWork: "",
+      numberOfOpenPositions: "",
       cityId: "",
       minSalary: "",
       maxSalary: "",
-      lastDate: "",
+      applicationDeadline: "",
     },
-    validationSchema: JobAdvertAddSchema,
+    validationSchema: NoticeAddSchema,
     onSubmit: (values) => {
-      values.employer_id = 4;
-      addNotice.add(values).then((result) => console.log(result.data.data));
-      alert(
-        "İş ilanınız gerekli kontrollerden sonra yayımlanacaktır, iyi günler."
+      console.log(values);
+
+      values.employerId = 9;
+      addNotice
+        .AddNotices(values)
+        .then((result) => console.log(result.data.data));
+
+      toast.success(
+        `İş ilanı başarıyla eklendi, Personelimiz onayından sonra yayınlanacaktır.`
       );
       history.push("/noticeadd");
     },
@@ -102,13 +108,13 @@ export default function NoticeAdd() {
     { key: "Ofis", text: "Ofis", value: "Ofis" },
   ];
 
-  const educationLevel = [
-    { key: "lise", text: "Lise", value: "lise" },
-    { key: "onlisans", text: "Ön Lisans", value: "on_lisans" },
-    { key: "lisans", text: "Lisans", value: "lisans" },
-    { key: "yukseklisans", text: "Yüksek Lisans", value: "yuksek_lisans" },
-    { key: "diger", text: "Diğer", value: "diger" },
-  ];
+  // const educationLevel = [
+  //   { key: "lise", text: "Lise", value: "lise" },
+  //   { key: "onlisans", text: "Ön Lisans", value: "on_lisans" },
+  //   { key: "lisans", text: "Lisans", value: "lisans" },
+  //   { key: "yukseklisans", text: "Yüksek Lisans", value: "yuksek_lisans" },
+  //   { key: "diger", text: "Diğer", value: "diger" },
+  // ];
 
   const workTimeType = [
     { key: "1", text: "Tam Zamanlı", value: "Tamzamanli" },
@@ -117,7 +123,10 @@ export default function NoticeAdd() {
 
   return (
     <div>
-      <Container className="main">
+      <Container className="register">
+        <Header as="h2" style={{ color: "#840EB6" }} textAlign="center">
+          İş İlanını Ekle
+        </Header>
         <Card fluid>
           <Card.Content>
             <Form onSubmit={formik.handleSubmit}>
@@ -147,25 +156,27 @@ export default function NoticeAdd() {
                       )}
                   </Grid.Column>
                   <Grid.Column width={8}>
-                    <label>Eğitim Seviyesi</label>
-                    <Form.Dropdown
-                      clearable
-                      item
-                      placeholder="Eğitim Seviyesi"
-                      search
-                      selection
-                      onChange={(event, data) =>
-                        handleChangeSemantic(data.value, "educationLevel")
-                      }
-                      onBlur={formik.onBlur}
-                      id="educationLevel"
-                      value={formik.values.educationLevel}
-                      options={educationLevel}
-                    />
-                    {formik.errors.educationLevel &&
-                      formik.touched.educationLevel && (
+                    <Form.Field>
+                      <label>Çalışma Süresi</label>
+                      <Form.Dropdown
+                        clearable
+                        item
+                        placeholder="Çalışma Süresi"
+                        search
+                        onChange={(event, data) =>
+                          handleChangeSemantic(data.value, "workTimeType")
+                        }
+                        onBlur={formik.onBlur}
+                        id="workTimeType"
+                        value={formik.values.workTimeType}
+                        selection
+                        options={workTimeType}
+                      />
+                    </Form.Field>
+                    {formik.errors.workTimeType &&
+                      formik.touched.workTimeType && (
                         <div className={"ui pointing red basic label"}>
-                          {formik.errors.educationLevel}
+                          {formik.errors.workTimeType}
                         </div>
                       )}
                   </Grid.Column>
@@ -205,44 +216,21 @@ export default function NoticeAdd() {
                       search
                       selection
                       onChange={(event, data) =>
-                        handleChangeSemantic(data.value, "workPlaceId")
+                        handleChangeSemantic(data.value, "typeOfWork")
                       }
                       onBlur={formik.onBlur}
-                      id="workPlaceId"
-                      value={formik.values.workPlaceId}
+                      id="typeOfWork"
+                      value={formik.values.typeOfWork}
                       options={typeOfWork}
                     />
-                    {formik.errors.workPlaceId &&
-                      formik.touched.workPlaceId && (
-                        <div className={"ui pointing red basic label"}>
-                          {formik.errors.workPlaceId}
-                        </div>
-                      )}
+                    {formik.errors.typeOfWork && formik.touched.typeOfWork && (
+                      <div className={"ui pointing red basic label"}>
+                        {formik.errors.typeOfWork}
+                      </div>
+                    )}
                   </Grid.Column>
                 </Grid>
               </Form.Field>
-              <Form.Field>
-                <label>Çalışma Süresi</label>
-                <Form.Dropdown
-                  clearable
-                  item
-                  placeholder="Çalışma Süresi"
-                  search
-                  onChange={(event, data) =>
-                    handleChangeSemantic(data.value, "workTimeId")
-                  }
-                  onBlur={formik.onBlur}
-                  id="workTimeId"
-                  value={formik.values.workTimeId}
-                  selection
-                  options={workTimeType}
-                />
-              </Form.Field>
-              {formik.errors.workTimeId && formik.touched.workTimeId && (
-                <div className={"ui pointing red basic label"}>
-                  {formik.errors.workTimeId}
-                </div>
-              )}
               <Form.Field>
                 <Grid stackable>
                   <Grid.Column width={8}>
@@ -288,18 +276,18 @@ export default function NoticeAdd() {
                     <Input
                       style={{ width: "100%" }}
                       type="number"
-                      id="openPositions"
-                      name="openPositions"
-                      error={Boolean(formik.errors.openPositions)}
+                      id="numberOfOpenPositions"
+                      name="numberOfOpenPositions"
+                      error={Boolean(formik.errors.numberOfOpenPositions)}
                       onChange={formik.handleChange}
-                      value={formik.values.openPositions}
+                      value={formik.values.numberOfOpenPositions}
                       onBlur={formik.handleBlur}
                       placeholder="Açık İş Pozisyonu Sayısı"
                     ></Input>
-                    {formik.errors.openPositions &&
-                      formik.touched.openPositions && (
+                    {formik.errors.numberOfOpenPositions &&
+                      formik.touched.numberOfOpenPositions && (
                         <div className={"ui pointing red basic label"}>
-                          {formik.errors.openPositions}
+                          {formik.errors.numberOfOpenPositions}
                         </div>
                       )}
                   </Grid.Column>
@@ -308,20 +296,21 @@ export default function NoticeAdd() {
                     <Input
                       style={{ width: "100%" }}
                       type="date"
-                      error={Boolean(formik.errors.lastDate)}
-                      value={formik.values.lastDate}
+                      error={Boolean(formik.errors.applicationDeadline)}
+                      value={formik.values.applicationDeadline}
                       onBlur={formik.handleBlur}
                       onChange={(event, data) =>
-                        handleChangeSemantic(data.value, "lastDate")
+                        handleChangeSemantic(data.value, "applicationDeadline")
                       }
-                      name="lastDate"
+                      name="applicationDeadline"
                       placeholder="Son Başvuru Tarihi"
                     ></Input>
-                    {formik.errors.lastDate && formik.touched.lastDate && (
-                      <div className={"ui pointing red basic label"}>
-                        {formik.errors.lastDate}
-                      </div>
-                    )}
+                    {formik.errors.applicationDeadline &&
+                      formik.touched.applicationDeadline && (
+                        <div className={"ui pointing red basic label"}>
+                          {formik.errors.applicationDeadline}
+                        </div>
+                      )}
                   </Grid.Column>
                 </Grid>
               </Form.Field>
@@ -329,22 +318,23 @@ export default function NoticeAdd() {
                 <label>Açıklama</label>
                 <TextArea
                   placeholder="Açıklama"
-                  error={Boolean(formik.errors.description).toString()}
+                  error={Boolean(formik.errors.jobDescription).toString()}
                   onChange={formik.handleChange}
-                  value={formik.values.description}
-                  name="description"
+                  value={formik.values.jobDescription}
+                  name="jobDescription"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   style={{ minHeight: 100 }}
                 />
-                {formik.errors.description && formik.touched.description && (
-                  <div className={"ui pointing red basic label"}>
-                    {formik.errors.description}
-                  </div>
-                )}
+                {formik.errors.jobDescription &&
+                  formik.touched.jobDescription && (
+                    <div className={"ui pointing red basic label"}>
+                      {formik.errors.jobDescription}
+                    </div>
+                  )}
               </Form.Field>
               <Button
-                content="Ekle"
+                content="İlanı Ekle"
                 inverted
                 color="purple"
                 labelPosition="right"

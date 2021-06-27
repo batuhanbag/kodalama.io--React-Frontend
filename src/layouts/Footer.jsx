@@ -23,73 +23,7 @@ export default function Footer() {
       >
         <Container textAlign="center" style={{ color: "black" }}>
           <Grid divided inverted stackable>
-            <Grid.Column width={3}>
-              <Header
-                inverted
-                as="h4"
-                style={{ color: "black" }}
-                content="Group 1"
-              />
-              <List link inverted>
-                <List.Item as="a" style={{ color: "black" }}>
-                  Link One
-                </List.Item>
-                <List.Item as="a" style={{ color: "black" }}>
-                  Link Two
-                </List.Item>
-                <List.Item as="a" style={{ color: "black" }}>
-                  Link Three
-                </List.Item>
-                <List.Item as="a" style={{ color: "black" }}>
-                  Link Four
-                </List.Item>
-              </List>
-            </Grid.Column>
-            <Grid.Column width={3}>
-              <Header
-                inverted
-                as="h4"
-                style={{ color: "black" }}
-                content="Group 2"
-              />
-              <List link inverted>
-                <List.Item as="a" style={{ color: "black" }}>
-                  Link One
-                </List.Item>
-                <List.Item as="a" style={{ color: "black" }}>
-                  Link Two
-                </List.Item>
-                <List.Item as="a" style={{ color: "black" }}>
-                  Link Three
-                </List.Item>
-                <List.Item as="a" style={{ color: "black" }}>
-                  Link Four
-                </List.Item>
-              </List>
-            </Grid.Column>
-            <Grid.Column width={3}>
-              <Header
-                inverted
-                as="h4"
-                style={{ color: "black" }}
-                content="Group 3"
-              />
-              <List link inverted>
-                <List.Item as="a" style={{ color: "black" }}>
-                  Link One
-                </List.Item>
-                <List.Item as="a" style={{ color: "black" }}>
-                  Link Two
-                </List.Item>
-                <List.Item as="a" style={{ color: "black" }}>
-                  Link Three
-                </List.Item>
-                <List.Item as="a" style={{ color: "black" }}>
-                  Link Four
-                </List.Item>
-              </List>
-            </Grid.Column>
-            <Grid.Column width={7}>
+            <Grid.Column width={16}>
               <Header
                 inverted
                 as="h4"
