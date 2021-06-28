@@ -14,4 +14,8 @@ export default class JobSeekerService {
       "http://localhost:8080/api/jobseekers/getById?userId=" + id
     );
   }
+
+  registerJobSeeker(body) {
+    return axios.post("http://localhost:8080/api/jobseekers/register", body);
+  }
 }

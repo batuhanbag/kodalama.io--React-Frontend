@@ -30,8 +30,12 @@ export default function NoticeDetail() {
     <div>
       <Container className="main">
         <Grid
-          celled
-          style={{ backgroundColor: "white", width: 850, padding: 25 }}
+          style={{
+            backgroundColor: "white",
+            width: 850,
+            padding: 25,
+            marginTop: 20,
+          }}
         >
           <Grid.Row>
             <Grid.Column width={16}>
