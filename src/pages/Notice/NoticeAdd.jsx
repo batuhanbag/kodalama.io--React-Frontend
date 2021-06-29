@@ -60,10 +60,39 @@ export default function NoticeAdd() {
     onSubmit: (values) => {
       console.log(values);
 
-      values.employerId = 9;
-      addNotice
-        .AddNotices(values)
-        .then((result) => console.log(result.data.data));
+      values.employerId = 13;
+
+      let date = new Date();
+
+      let day = date.getDate();
+      let monthIndex = date.getMonth() + 1;
+      let year = date.getFullYear();
+
+      let today = day + "-" + monthIndex + "-" + year;
+
+      values.creationDate = today;
+
+      console.log(today);
+
+      let a = { city: { id: values.cityId } };
+      console.log(a);
+
+      let body = {
+        employer: { id: values.employerId },
+        jobDescription: values.jobDescription,
+        jobPosition: { jobPositionId: values.jobPositionId },
+        workTimeType: values.workTimeType,
+        typeOfWork: values.typeOfWork,
+        numberOfOpenPositions: values.numberOfOpenPositions,
+        city: { id: values.cityId },
+        minSalary: values.minSalary,
+        maxSalary: values.maxSalary,
+        active: false,
+        applicationDeadline: values.applicationDeadline,
+        creationDate: today,
+      };
+
+      addNotice.AddNotices(body).then((result) => console.log(result));
 
       toast.success(
         `İş ilanı başarıyla eklendi, Personelimiz onayından sonra yayınlanacaktır.`

@@ -15,6 +15,8 @@ import { useHistory } from "react-router-dom";
 import * as Yup from "yup";
 import { Link } from "react-router-dom";
 import logo from "../assets/hrms-logo.png";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.min.css";
 import CityService from "../../../services/CityService";
 import EmployerService from "../../../services/EmployerService";
 
@@ -27,6 +29,10 @@ export default function EmployerRegister() {
     location: Yup.string().required("Lokasyon Gereklidir"),
     password: Yup.string()
       .required("Parola Gereklidir")
+      .min(8, "Parola 8 karakterden küçük olamaz")
+      .max(24, "Parola 24 karakterden uzun olamaz."),
+    rePassword: Yup.string()
+      .required("Parola Tekrar Gereklidir")
       .min(8, "Parola 8 karakterden küçük olamaz")
       .max(24, "Parola 24 karakterden uzun olamaz."),
     phoneNumber: Yup.number().required("Telefon Numarası Gereklidir."),
@@ -44,6 +50,7 @@ export default function EmployerRegister() {
       email: "",
       location: "",
       password: "",
+      rePassword: "",
       phoneNumber: "",
       sector: "",
       webSite: "",
@@ -52,11 +59,28 @@ export default function EmployerRegister() {
     onSubmit: (values) => {
       console.log(values);
 
-      addEmployer
-        .addEmployers(values)
-        .then((result) => console.log(result.data));
+      let body = {
+        companyName: values.companyName,
+        email: values.email,
+        location: values.location,
+        password: values.password,
+        phoneNumber: values.phoneNumber,
+        sector: values.sector,
+        webSite: values.webSite,
+        status: true,
+        verificationStatus: true,
+      };
 
-      history.push("/");
+      if (values.password == values.rePassword) {
+        addEmployer
+          .addEmployers(body)
+          .then((result) => console.log(result.data));
+        toast.success(`Kaydınız Başarıyla Gerçekleştirilmiştir.`);
+        history.push("/");
+      } else {
+        toast.error("Kaydınız Başarısız, Lütfen Bilgilerinizi Kontrol Ediniz.");
+        history.push("/registerEmployer");
+      }
     },
   });
 
@@ -81,7 +105,7 @@ export default function EmployerRegister() {
         <Header as="h2" style={{ color: "#840EB6" }} textAlign="center">
           Şirket Olarak Kayıt Ol
         </Header>
-        <Form size="large">
+        <Form size="large" onSubmit={formik.handleSubmit}>
           <Segment stacked>
             <Grid stackable>
               <Grid.Column width={8}>
@@ -255,9 +279,18 @@ export default function EmployerRegister() {
                     placeholder="Şifre tekrar"
                     type="password"
                     name="rePassword"
+                    onChange={(event, data) =>
+                      handleChangeSemantic(data.value, "rePassword")
+                    }
                     onBlur={formik.onBlur}
                     id="rePassword"
+                    value={formik.values.rePassword}
                   />
+                  {formik.errors.rePassword && formik.touched.rePassword && (
+                    <div className={"ui pointing red basic label"}>
+                      {formik.errors.rePassword}
+                    </div>
+                  )}
                 </div>
               </Grid.Column>
             </Grid>

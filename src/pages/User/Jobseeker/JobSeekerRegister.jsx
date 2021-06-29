@@ -19,12 +19,6 @@ import JobSeekerService from "../../../services/JobSeekerService";
 import axios from "axios";
 
 export default function JobSeekerRegister() {
-  const options = [
-    { key: "m", text: "Erkek", value: "male" },
-    { key: "f", text: "Kadın", value: "female" },
-    { key: "o", text: "Belirtmek İstemiyorum", value: "other" },
-  ];
-
   const history = useHistory();
 
   const JobSeekerRegisterSchema = Yup.object().shape({
@@ -76,8 +70,8 @@ export default function JobSeekerRegister() {
       console.log(body);
 
       if (
-        values.password == values.passwordAgain &&
-        values.email == values.reEmail
+        values.password === values.passwordAgain &&
+        values.email === values.reEmail
       ) {
         jobSeekerRegister
           .registerJobSeeker(body)
