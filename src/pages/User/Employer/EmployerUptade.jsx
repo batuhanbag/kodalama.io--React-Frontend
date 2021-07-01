@@ -40,6 +40,7 @@ export default function EmployerUptade() {
     employer.getEmployerById(9).then((result) => setEmployer(result.data.data));
   }, []);
 
+  console.log(employer.companyName + "osman");
   const history = useHistory();
 
   let uptadeEmployer = new EmployerService();

@@ -44,11 +44,11 @@ export default function JobSeekerUpdate() {
     password: Yup.string().min(8).max(24).required("Şifre gereklidir."),
   });
 
-  let jobSeekerRegister = new JobSeekerService();
+  let jobSeekerUpdate = new JobSeekerService();
 
   const formik = useFormik({
     initialValues: {
-      firstName: "",
+      firstName: jobSeeker.firstName,
       lastName: "",
       nationalityId: "",
       birthYear: "",
@@ -68,22 +68,19 @@ export default function JobSeekerUpdate() {
         nationalityId: values.nationalityId,
         password: values.password,
         birthYear: values.birthYear,
-        status: true,
+        status: false,
       };
       console.log(body);
 
-      if (
-        values.password === values.passwordAgain &&
-        values.email === values.reEmail
-      ) {
-        jobSeekerRegister
-          .registerJobSeeker(body)
+      if (jobSeeker.password == values.password) {
+        jobSeekerUpdate
+          .updateJobSeeker(body)
           .then((result) => console.log(result));
-        toast.success(`Kaydınız Başarıyla Gerçekleştirilmiştir.`);
-        history.push("/registerJobSeeker");
+        toast.success(`Güncelleme Başarıyla Gerçekleştirilmiştir`);
+        history.push("/uptadeJobSeeker");
       } else {
-        toast.error("Kaydınız Başarısız, Lütfen Bilgilerinizi Kontrol Ediniz.");
-        history.push("/registerJobSeeker");
+        toast.error(`Güncelleme Başarısız.`);
+        history.push("/uptadeJobSeeker");
       }
     },
   });
@@ -96,7 +93,7 @@ export default function JobSeekerUpdate() {
     <div>
       <Container className="register">
         <Header as="h2" style={{ color: "#840EB6" }} textAlign="center">
-          Kayıt Ol
+          Bilgilerimi Güncelle
         </Header>
         <Form size="large" onSubmit={formik.handleSubmit}>
           <Segment stacked>
@@ -109,7 +106,7 @@ export default function JobSeekerUpdate() {
                     fluid
                     icon="user"
                     iconPosition="left"
-                    placeholder="İsim"
+                    placeholder={jobSeeker.firstName}
                     type="text"
                     name="firstName"
                     onChange={(event, data) =>
@@ -131,7 +128,7 @@ export default function JobSeekerUpdate() {
                     fluid
                     icon="user"
                     iconPosition="left"
-                    placeholder="Soy isim"
+                    placeholder={jobSeeker.lastName}
                     type="text"
                     name="lastName"
                     onChange={(event, data) =>
@@ -153,7 +150,7 @@ export default function JobSeekerUpdate() {
                     fluid
                     icon="id card"
                     iconPosition="left"
-                    placeholder="Kimlik numarası"
+                    placeholder={jobSeeker.nationalityId}
                     type="text"
                     name="nationalityId"
                     onChange={(event, data) =>
@@ -170,13 +167,16 @@ export default function JobSeekerUpdate() {
                       </div>
                     )}
                 </div>
+              </Grid.Column>
+
+              <Grid.Column width={8}>
                 <div style={{ marginTop: "1em" }}>
                   <label>Doğum Tarihi</label>
                   <Form.Input
                     fluid
                     icon="calendar times"
                     iconPosition="left"
-                    placeholder="Dogum tarihi"
+                    placeholder={jobSeeker.birthYear}
                     type="text"
                     name="birthYear"
                     onChange={(event, data) =>
@@ -192,16 +192,13 @@ export default function JobSeekerUpdate() {
                     </div>
                   )}
                 </div>
-              </Grid.Column>
-
-              <Grid.Column width={8}>
                 <div style={{ marginTop: "1em" }}>
                   <label>Email</label>
                   <Form.Input
                     fluid
                     icon="mail"
                     iconPosition="left"
-                    placeholder="E-mail adresi"
+                    placeholder={jobSeeker.email}
                     type="email"
                     name="email"
                     onChange={(event, data) =>
@@ -217,27 +214,7 @@ export default function JobSeekerUpdate() {
                     </div>
                   )}
                 </div>
-                <div style={{ marginTop: "1em" }}>
-                  <label>Email Tekrar</label>
-                  <Form.Input
-                    fluid
-                    icon="mail"
-                    iconPosition="left"
-                    placeholder="E-mail adresi tekrar"
-                    name="reEmail"
-                    onChange={(event, data) =>
-                      handleChangeSemantic(data.value, "reEmail")
-                    }
-                    onBlur={formik.onBlur}
-                    id="reEmail"
-                    value={formik.values.reEmail}
-                  />
-                  {formik.errors.reEmail && formik.touched.reEmail && (
-                    <div className={"ui pointing red basic label"}>
-                      {formik.errors.reEmail}
-                    </div>
-                  )}
-                </div>
+
                 <div style={{ marginTop: "1em" }}>
                   <label>Şifre</label>
                   <Form.Input
@@ -260,29 +237,6 @@ export default function JobSeekerUpdate() {
                     </div>
                   )}
                 </div>
-                <div style={{ marginTop: "1em" }}>
-                  <label>Şifre Tekrar</label>
-                  <Form.Input
-                    fluid
-                    icon="lock"
-                    iconPosition="left"
-                    placeholder="Şifre tekrar"
-                    type="password"
-                    name="passwordAgain"
-                    onChange={(event, data) =>
-                      handleChangeSemantic(data.value, "passwordAgain")
-                    }
-                    onBlur={formik.onBlur}
-                    id="passwordAgain"
-                    value={formik.values.passwordAgain}
-                  />
-                  {formik.errors.passwordAgain &&
-                    formik.touched.passwordAgain && (
-                      <div className={"ui pointing red basic label"}>
-                        {formik.errors.passwordAgain}
-                      </div>
-                    )}
-                </div>
               </Grid.Column>
             </Grid>
 
@@ -293,15 +247,10 @@ export default function JobSeekerUpdate() {
               size="large"
               type="submit"
             >
-              Kayıt Ol
+              Bilgilerimi Güncelle
             </Button>
           </Segment>
         </Form>
-        <Message info>
-          <Link to={"/registerEmployer"}>
-            İşveren olarak kaydolmak için buraya tıkla
-          </Link>
-        </Message>
       </Container>
     </div>
   );
