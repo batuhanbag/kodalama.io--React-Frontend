@@ -1,5 +1,6 @@
 import React from "react";
 import { Button, Image, Dropdown, Menu } from "semantic-ui-react";
+import { useHistory, Link } from "react-router-dom";
 
 export default function SignedIn(props) {
   return (
@@ -12,7 +13,13 @@ export default function SignedIn(props) {
         />
         <Dropdown pointing="top right" text="Batuhan">
           <Dropdown.Menu>
-            <Dropdown.Item text="Bilgilerimi Güncelle" icon="cog" />
+            <Link to={`/uptadeEmployer`}>
+              <Dropdown.Item text="Bilgilerimi Güncelle-1" icon="cog" />
+            </Link>
+
+            <Link to={`/uptadeJobSeeker`}>
+              <Dropdown.Item text="Bilgilerimi Güncelle-2" icon="cog" />
+            </Link>
             <Dropdown.Item text="Cv Güncelle" icon="tags" />
             <Dropdown.Item text="Favori İlanlarım" icon="favorite" />
 

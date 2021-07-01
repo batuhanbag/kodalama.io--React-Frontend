@@ -13,6 +13,10 @@ import EmployerRegister from "../pages/User/Employer/EmployerRegister";
 import { ToastContainer } from "react-toastify";
 import CvList from "../pages/CV/CvList";
 import NoticeDetail from "../pages/Notice/NoticeDetail";
+import EmployeeUptade from "../pages/User/Employee/EmployeeUptade";
+import Admin from "./Admin";
+import EmployerUptade from "../pages/User/Employer/EmployerUptade";
+import JobSeekerUpdate from "../pages/User/Jobseeker/JobSeekerUpdate";
 
 export default function Dashboard() {
   return (
@@ -32,6 +36,12 @@ export default function Dashboard() {
               <Route exact path="/cvs/:id" component={CvList} />
               <Route exact path="/noticeadd" component={NoticeAdd} />
               <Route exact path="/noticedetail/:id" component={NoticeDetail} />
+              <Route exact path="/uptadeEmployer" component={EmployerUptade} />
+              <Route
+                exact
+                path="/uptadeJobSeeker"
+                component={JobSeekerUpdate}
+              />
               <Route
                 exact
                 path="/registerJobSeeker"
